@@ -49,10 +49,13 @@ export default class Controller {
 		context.strokeStyle = 'black';
 		context.lineCap = 'round';
 		context.lineWidth = 2;
+		
+		const xzAngle = (2 * Math.PI / 4) * this.animAmt;
+		const yAngle = Math.PI / 8;
 
 		for (const [p1, p2] of this.lines) {
-			const p1_2d = to2dIsometric(p1.x, p1.y, p1.z);
-			const p2_2d = to2dIsometric(p2.x, p2.y, p2.z);
+			const p1_2d = to2dIsometric(p1.x, p1.y, p1.z, xzAngle, yAngle);
+			const p2_2d = to2dIsometric(p2.x, p2.y, p2.z, xzAngle, yAngle);
 			context.moveTo(100 * p1_2d.x, 100 * p1_2d.y);
 			context.lineTo(100 * p2_2d.x, 100 * p2_2d.y);
 		}
