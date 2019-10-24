@@ -47,6 +47,7 @@ export default class Controller {
 	render(context) {
 		context.beginPath();
 		context.strokeStyle = 'black';
+		context.lineCap = 'round';
 		context.scale(100, 100);
 
 		for (const [p1, p2] of this.lines) {
