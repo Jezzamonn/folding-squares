@@ -48,13 +48,13 @@ export default class Controller {
 		context.beginPath();
 		context.strokeStyle = 'black';
 		context.lineCap = 'round';
-		context.scale(100, 100);
+		context.lineWidth = 2;
 
 		for (const [p1, p2] of this.lines) {
 			const p1_2d = to2dIsometric(p1.x, p1.y, p1.z);
 			const p2_2d = to2dIsometric(p2.x, p2.y, p2.z);
-			context.moveTo(p1_2d.x, p1_2d.y);
-			context.lineTo(p2_2d.x, p2_2d.y);
+			context.moveTo(100 * p1_2d.x, 100 * p1_2d.y);
+			context.lineTo(100 * p2_2d.x, 100 * p2_2d.y);
 		}
 		context.stroke();
 	}
