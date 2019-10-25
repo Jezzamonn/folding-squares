@@ -33,15 +33,17 @@ export default class Controller {
 		context.lineWidth = 2;
 		
 		const tileSize = 100;
-		const numTiles = 2;
+		const numTiles = 3;
 		const totalSize = numTiles * tileSize;
-		const hTotalSize = totalSize / 2;
+		// Halving total size is to account for the fact that it's the width
+		// from zero, and we're centered around zero.
+		const furthestPosition = totalSize / 2 - tileSize / 2;
 		for (let ix = 0; ix < numTiles; ix++) {
 			const xAmt = numTiles == 0 ? 0 : ix / (numTiles - 1);
-			const x = slurp(-hTotalSize, hTotalSize, xAmt);
+			const x = slurp(-furthestPosition, furthestPosition, xAmt);
 			for (let iz = 0; iz < numTiles; iz++) {
 				const zAmt = numTiles == 0 ? 0 : iz / (numTiles - 1);
-				const z = slurp(-hTotalSize, hTotalSize, zAmt);
+				const z = slurp(-furthestPosition, furthestPosition, zAmt);
 
 				this.drawShape(context, {x, y: 0, z});
 			}
