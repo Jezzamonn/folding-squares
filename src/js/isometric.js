@@ -1,4 +1,12 @@
 export function to2dIsometric(x, y, z, xzAngle=0, yAngle=0) {
+    const transformMatrix = getRotationMatrix(xzAngle, yAngle);
+
+    const transformed = matrixMul(transformMatrix, [[x], [y], [z]]);
+    // Just return the x and y
+    return {x: transformed[0][0], y: transformed[1][0]};
+}
+
+export function getRotationMatrix(xzAngle, yAngle) {
     // s/o to wikipedia for these rotation matrices
     const xzRotateMatrix = [
         [Math.cos(xzAngle), 0, -Math.sin(xzAngle)],
@@ -10,12 +18,26 @@ export function to2dIsometric(x, y, z, xzAngle=0, yAngle=0) {
         [0, Math.cos(yAngle), Math.sin(yAngle)],
         [0, -Math.sin(yAngle), Math.cos(yAngle)]
     ];
-    const transformMatrix = matrixMul(yRotateMatrix, xzRotateMatrix);
-
-    const transformed = matrixMul(transformMatrix, [[x], [y], [z]]);
-    // Just return the x and y
-    return {x: transformed[0][0], y: transformed[1][0]};
+    return matrixMul(yRotateMatrix, xzRotateMatrix);
 }
+
+export function columnVecToPoint(vec) {
+	return {x: vec[0][0], y: vec[1][0], z: vec[2][0]}; 
+}
+
+export function pointToColumnVec(vec) {
+	return [[vec.x], [vec.y], [vec.z]];
+}
+
+export function rotatePoint(point, rotationMatrix) {
+	return columnVecToPoint(
+		matrixMul(
+			rotationMatrix,
+			pointToColumnVec(point)
+		)
+	);
+}
+
 /**
  * I kinda forgot how matrix multiplication works but I think this is it.
  *

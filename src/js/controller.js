@@ -1,4 +1,4 @@
-import { to2dIsometric } from "./isometric";
+import { to2dIsometric, getRotationMatrix, columnVecToPoint, rotatePoint } from "./isometric";
 
 export default class Controller {
 
@@ -6,27 +6,8 @@ export default class Controller {
 		this.animAmt = 0;
 		this.period = 3;
 
-		const points = [];
-		for (const x of [-1, 1]) {
-			for (const y of [-1, 1]) {
-				for (const z of [-1, 1]) {
-					points.push({x, y, z});
-				}
-			}
-		}
-
-		this.lines = [];
-		for (let i = 0; i < points.length; i++) {
-			const p1 = points[i];
-			for (let j = i + 1; j < points.length; j++) {
-				const p2 = points[j];
-
-				const diff = Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y) + Math.abs(p1.z - p2.z);
-				if (diff === 2) {
-					this.lines.push([p1, p2]);
-				}
-			}
-		}
+		this.xzAngle = Math.PI / 6;
+		this.yAngle = Math.PI / 8;
 	}
 
 	/**
@@ -45,21 +26,45 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	render(context) {
-		context.beginPath();
 		context.strokeStyle = 'black';
+		context.fillStyle = 'black';
 		context.lineCap = 'round';
 		context.lineWidth = 2;
 		
-		const xzAngle = (2 * Math.PI / 4) * this.animAmt;
-		const yAngle = Math.PI / 8;
+		const numSides = 4;
+		for (let i = 0; i < numSides; i++) {
+			const angle = 2 * Math.PI * (i / numSides);
+			const rotationMatrix = getRotationMatrix(angle, 0);
+			const points = [
+				{x: 100, y: 0, z: 0},
+				{x: 100, y: 0, z: 100},
+				{x: 0, y: 0, z: 100},
+			];
+			const rotatedPoints = points.map(p => rotatePoint(p, rotationMatrix));
 
-		for (const [p1, p2] of this.lines) {
-			const p1_2d = to2dIsometric(p1.x, p1.y, p1.z, xzAngle, yAngle);
-			const p2_2d = to2dIsometric(p2.x, p2.y, p2.z, xzAngle, yAngle);
-			context.moveTo(100 * p1_2d.x, 100 * p1_2d.y);
-			context.lineTo(100 * p2_2d.x, 100 * p2_2d.y);
+			context.beginPath();
+			for (let j = 0; j < rotatedPoints.length; j++) {
+				const point = rotatedPoints[j];
+				if (j == 0) {
+					this.moveTo3d(context, point);
+				}
+				else {
+					this.lineTo3d(context, point);
+				}
+				// context.closePath();
+				context.stroke();
+			}
 		}
-		context.stroke();
+	}
+
+	moveTo3d(context, point) {
+		const point2d = to2dIsometric(point.x, point.y, point.z, this.xzAngle, this.yAngle);
+		context.moveTo(point2d.x, point2d.y);
+	}
+
+	lineTo3d(context, point){
+		const point2d = to2dIsometric(point.x, point.y, point.z, this.xzAngle, this.yAngle);
+		context.lineTo(point2d.x, point2d.y);
 	}
 
 }
