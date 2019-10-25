@@ -41,7 +41,7 @@ export default class Controller {
 
 				const distAmt = Math.sqrt(x * x + z * z) / furthestPosition;
 
-				this.drawShape(context, {x, y: 0, z}, (this.animAmt + 0.4 * distAmt));
+				this.drawShape(context, {x, y: 0, z}, (this.animAmt - 0.4 * distAmt));
 			}
 		}
 	}
