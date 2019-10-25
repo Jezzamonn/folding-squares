@@ -26,12 +26,6 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	render(context) {
-		context.strokeStyle = 'black';
-		context.fillStyle = 'white';
-		context.lineCap = 'round';
-		context.lineJoin = 'round';
-		context.lineWidth = 2;
-		
 		const tileSize = 100;
 		const numTiles = 15;
 		const totalSize = numTiles * tileSize;
@@ -46,6 +40,10 @@ export default class Controller {
 				const z = slurp(-furthestPosition, furthestPosition, zAmt);
 
 				this.drawShape(context, {x, y: 0, z});
+
+				const p = to2dIsometric(x, 0, z, this.xzAngle, this.yAngle);
+				context.fillStyle = 'black';
+				context.fillText(`${x.toFixed()},${z.toFixed()}`, p.x, p.y);
 			}
 		}
 	}
@@ -76,6 +74,11 @@ export default class Controller {
 			.map(p => rotatePoint(p, rotationMatrix))
 			.map(p => ({x: p.x + position.x, y: p.y + position.y, z: p.z + position.z}));
 
+			context.strokeStyle = 'black';
+			context.fillStyle = ['#FFF', '#EEE', '#DDD', '#CCC'][i];
+			context.lineCap = 'round';
+			context.lineJoin = 'round';
+			context.lineWidth = 2;
 			context.beginPath();
 			for (let j = 0; j < points.length; j++) {
 				const point = points[j];
