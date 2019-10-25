@@ -5,12 +5,14 @@ export default class Controller {
 	constructor() {
 		this.animAmt = 0;
 		this.period = 20;
-
-		this.yAngle = Math.PI / 6;
 	}
 
 	get xzAngle() {
 		return (2 * Math.PI / 4) * this.animAmt;
+	}
+
+	get yAngle() {
+		return slurp(Math.PI / 6, Math.PI / 8, loop(2 * this.animAmt))
 	}
 
 	/**
