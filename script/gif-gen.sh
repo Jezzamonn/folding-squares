@@ -7,6 +7,7 @@ temp_dir="/tmp/gif/"
 out_dir="promo/"
 frame_pattern="${temp_dir}frame%004d.png"
 palette="/tmp/gif/palette.png"
+temp_gif_filename="${temp_dir}tmp.gif"
 
 # Use the hash of the current commit as the name
 current_commit=`git rev-parse --short HEAD`
@@ -21,7 +22,7 @@ node build/save-frames.bundle.js --width=500 --height=500 --out="$temp_dir"
 # Then bunch them together into a gif! (?)
 # Thanks Giphy Engineering!! https://engineering.giphy.com/how-to-make-gifs-with-ffmpeg/
 ffmpeg -f image2 -i "$frame_pattern" -filter_complex "[0:v] palettegen" -y "$palette"
-ffmpeg -f image2 -i "$frame_pattern" -framerate 30 -i $palette -filter_complex "[0:v][1:v] paletteuse" -y "${out_filename}"
+ffmpeg -f image2 -i "$frame_pattern" -framerate 30 -i $palette -filter_complex "[0:v][1:v] paletteuse" -y "${temp_gif_filename}"
 
 # Optimise with gifsicle
-gifsicle --optimize --colors=16 "${out_filename}" -o "${out_filename}"
+gifsicle --optimize --colors=32 "${temp_gif_filename}" -o "${out_filename}"
