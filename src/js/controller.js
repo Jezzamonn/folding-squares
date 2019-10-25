@@ -6,7 +6,7 @@ export default class Controller {
 		this.animAmt = 0;
 		this.period = 5;
 
-		this.xzAngle = Math.PI / 6;
+		this.xzAngle = 0;
 		this.yAngle = Math.PI / 8;
 	}
 
@@ -27,13 +27,13 @@ export default class Controller {
 	 */
 	render(context) {
 		context.strokeStyle = 'black';
-		context.fillStyle = 'black';
+		context.fillStyle = 'white';
 		context.lineCap = 'round';
 		context.lineJoin = 'round';
 		context.lineWidth = 2;
 		
 		const tileSize = 100;
-		const numTiles = 2;
+		const numTiles = 15;
 		const totalSize = numTiles * tileSize;
 		// Halving total size is to account for the fact that it's the width
 		// from zero, and we're centered around zero.
@@ -85,7 +85,7 @@ export default class Controller {
 				else {
 					this.lineTo3d(context, point);
 				}
-				// context.closePath();
+				context.fill();
 				context.stroke();
 			}
 		}
