@@ -32,7 +32,7 @@ export default class Controller {
 		context.lineWidth = 2;
 		
 		const tileSize = 100;
-		const numTiles = 2;
+		const numTiles = 1;
 		const totalSize = numTiles * tileSize;
 		const hTotalSize = totalSize / 2;
 		for (let ix = 0; ix < numTiles; ix++) {
@@ -52,7 +52,7 @@ export default class Controller {
 	 */
 	drawShape(context, position) {
 		const moveAngle = -Math.PI * easeInOut(loop(this.animAmt), 2);
-		const moveXAmt = Math.cos(moveAngle);
+		const moveXAmt = -Math.cos(moveAngle);
 		const moveYAmt = Math.sin(moveAngle);
 		const size = 100;
 		const hSize = size / 2;
