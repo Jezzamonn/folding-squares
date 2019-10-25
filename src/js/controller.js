@@ -39,7 +39,9 @@ export default class Controller {
 				const zAmt = numTiles == 0 ? 0 : iz / (numTiles - 1);
 				const z = slurp(-furthestPosition, furthestPosition, zAmt);
 
-				this.drawShape(context, {x, y: 0, z});
+				const distAmt = Math.sqrt(x * x + z * z) / furthestPosition;
+
+				this.drawShape(context, {x, y: 0, z}, (this.animAmt + distAmt));
 			}
 		}
 	}
@@ -47,8 +49,8 @@ export default class Controller {
 	/**
 	 * @param {!CanvasRenderingContext2D} context
 	 */
-	drawShape(context, position) {
-		const moveAngle = -Math.PI * easeInOut(loop(this.animAmt), 2);
+	drawShape(context, position, animAmt) {
+		const moveAngle = -Math.PI * easeInOut(loop(animAmt), 2);
 		const moveXAmt = Math.cos(moveAngle);
 		const moveYAmt = Math.sin(moveAngle);
 		const size = 100;
