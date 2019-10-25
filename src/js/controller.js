@@ -37,10 +37,10 @@ export default class Controller {
 		const totalSize = numTiles * tileSize;
 		const hTotalSize = totalSize / 2;
 		for (let ix = 0; ix < numTiles; ix++) {
-			const xAmt = ix / (numTiles + 1);
+			const xAmt = numTiles == 0 ? 0 : ix / (numTiles - 1);
 			const x = slurp(-hTotalSize, hTotalSize, xAmt);
 			for (let iz = 0; iz < numTiles; iz++) {
-				const zAmt = iz / (numTiles + 1);
+				const zAmt = numTiles == 0 ? 0 : iz / (numTiles - 1);
 				const z = slurp(-hTotalSize, hTotalSize, zAmt);
 
 				this.drawShape(context, {x, y: 0, z});
