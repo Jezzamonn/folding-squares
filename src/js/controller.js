@@ -29,6 +29,7 @@ export default class Controller {
 		context.strokeStyle = 'black';
 		context.fillStyle = 'black';
 		context.lineCap = 'round';
+		context.lineJoin = 'round';
 		context.lineWidth = 2;
 		
 		const tileSize = 100;
