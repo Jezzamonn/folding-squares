@@ -56,18 +56,19 @@ export default class Controller {
 		const moveYAmt = Math.sin(moveAngle);
 		const size = 100;
 		const hSize = size / 2;
+		const qSize = size / 4;
 	
 		const numSides = 4;
 		for (let i = 0; i < numSides; i++) {
 			const angle = 2 * Math.PI * (i / numSides);
 			const rotationMatrix = getRotationMatrix(angle, 0);
 			const points = [
-				{x: size, y: 0, z: 0},
+				{x: hSize, y: 0, z: 0},
 				{
-					x: hSize + hSize * moveXAmt,
-					y: hSize * moveYAmt,
-					z: hSize + hSize * moveXAmt},
-				{x: 0, y: 0, z: size},
+					x: qSize + qSize * moveXAmt,
+					y: qSize * moveYAmt,
+					z: qSize + qSize * moveXAmt},
+				{x: 0, y: 0, z: hSize},
 			]
 			.map(p => ({x: p.x + position.x, y: p.y + position.y, z: p.z + position.z}))
 			.map(p => rotatePoint(p, rotationMatrix));
