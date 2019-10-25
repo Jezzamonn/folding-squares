@@ -31,7 +31,7 @@ export default class Controller {
 		context.lineCap = 'round';
 		context.lineWidth = 2;
 		
-		const moveAngle = Math.PI * this.animAmt;
+		const moveAngle = -Math.PI * this.animAmt;
 		const moveXAmt = Math.cos(moveAngle);
 		const moveYAmt = Math.sin(moveAngle);
 	
@@ -41,7 +41,10 @@ export default class Controller {
 			const rotationMatrix = getRotationMatrix(angle, 0);
 			const points = [
 				{x: 100, y: 0, z: 0},
-				{x: 100 * moveXAmt, y: 100 * moveYAmt, z: 100 * moveXAmt},
+				{
+					x: 50 + 50 * moveXAmt,
+					y: 50 * moveYAmt,
+					z: 50 + 50 * moveXAmt},
 				{x: 0, y: 0, z: 100},
 			];
 			const rotatedPoints = points.map(p => rotatePoint(p, rotationMatrix));
