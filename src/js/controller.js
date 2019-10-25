@@ -1,12 +1,12 @@
 import { to2dIsometric, getRotationMatrix, columnVecToPoint, rotatePoint } from "./isometric";
-import { loop, easeInOut, slurp } from './util';
+import { loop, easeInOut, slurp, gray } from './util';
 export default class Controller {
 
 	constructor() {
 		this.animAmt = 0;
-		this.period = 20;
+		this.period = 5;
 
-		this.xzAngle = 0;
+		this.xzAngle = Math.PI / 12;
 		this.yAngle = Math.PI / 8;
 	}
 
@@ -40,10 +40,6 @@ export default class Controller {
 				const z = slurp(-furthestPosition, furthestPosition, zAmt);
 
 				this.drawShape(context, {x, y: 0, z});
-
-				const p = to2dIsometric(x, 0, z, this.xzAngle, this.yAngle);
-				context.fillStyle = 'black';
-				context.fillText(`${x.toFixed()},${z.toFixed()}`, p.x, p.y);
 			}
 		}
 	}
@@ -75,7 +71,7 @@ export default class Controller {
 			.map(p => ({x: p.x + position.x, y: p.y + position.y, z: p.z + position.z}));
 
 			context.strokeStyle = 'black';
-			context.fillStyle = ['#FFF', '#EEE', '#DDD', '#CCC'][i];
+			context.fillStyle = gray(slurp(1, 0.9, -moveYAmt))
 			context.lineCap = 'round';
 			context.lineJoin = 'round';
 			context.lineWidth = 2;
