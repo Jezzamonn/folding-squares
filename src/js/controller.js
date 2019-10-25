@@ -4,15 +4,10 @@ export default class Controller {
 
 	constructor() {
 		this.animAmt = 0;
-		this.period = 20;
-	}
+		this.period = 5;
 
-	get xzAngle() {
-		return (2 * Math.PI / 4) * this.animAmt;
-	}
-
-	get yAngle() {
-		return slurp(Math.PI / 6, Math.PI / 8, loop(2 * this.animAmt))
+		this.xzAngle = Math.PI / 12;
+		this.yAngle = Math.PI / 6;
 	}
 
 	/**
@@ -53,7 +48,7 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	drawShape(context, position) {
-		const moveAngle = -Math.PI * easeInOut(loop(4 * this.animAmt), 2);
+		const moveAngle = -Math.PI * easeInOut(loop(this.animAmt), 2);
 		const moveXAmt = Math.cos(moveAngle);
 		const moveYAmt = Math.sin(moveAngle);
 		const size = 100;
@@ -75,11 +70,11 @@ export default class Controller {
 			.map(p => rotatePoint(p, rotationMatrix))
 			.map(p => ({x: p.x + position.x, y: p.y + position.y, z: p.z + position.z}));
 
-			context.strokeStyle = 'black';
-			context.fillStyle = gray(slurp(1, 0.9, -moveYAmt))
+			context.strokeStyle = gray(slurp(0.1, 0, -moveYAmt));
+			context.fillStyle = gray(slurp(0.1, 0, -moveYAmt));
 			context.lineCap = 'round';
 			context.lineJoin = 'round';
-			context.lineWidth = 2;
+			context.lineWidth = 1;
 			context.beginPath();
 			for (let j = 0; j < points.length; j++) {
 				const point = points[j];
