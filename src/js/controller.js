@@ -10,6 +10,10 @@ export default class Controller {
 		this.yAngle = Math.PI / 6;
 	}
 
+	get flipped() {
+		return this.animAmt >= 0.5;
+	}
+
 	/**
 	 * Simulate time passing.
 	 *
@@ -39,9 +43,7 @@ export default class Controller {
 				const zAmt = numTiles == 0 ? 0 : iz / (numTiles - 1);
 				const z = slurp(-furthestPosition, furthestPosition, zAmt);
 
-				const distAmt = Math.sqrt(x * x + z * z) / furthestPosition;
-
-				this.drawShape(context, {x, y: 0, z}, (this.animAmt - 0.4 * distAmt));
+				this.drawShape(context, {x, y: 0, z});
 			}
 		}
 	}
@@ -49,31 +51,37 @@ export default class Controller {
 	/**
 	 * @param {!CanvasRenderingContext2D} context
 	 */
-	drawShape(context, position, animAmt) {
-		const moveAngle = -Math.PI * easeInOut(loop(animAmt), 2);
-		const moveXAmt = Math.cos(moveAngle);
-		const moveYAmt = Math.sin(moveAngle);
+	drawShape(context, position) {
+		const dist = Math.sqrt(position.x * position.x + position.z * position.z);
 		const size = 100;
 		const hSize = size / 2;
 		const qSize = size / 4;
 	
 		const numSides = 4;
 		for (let i = 0; i < numSides; i++) {
+			const getMidpoint = (animAmt) => {
+				const moveAngle = -Math.PI * easeInOut(loop(animAmt), 2);
+				const moveXAmt = Math.cos(moveAngle);
+				const moveYAmt = Math.sin(moveAngle);
+				return {
+					x: qSize + qSize * moveXAmt,
+					y: qSize * moveYAmt,
+					z: qSize + qSize * moveXAmt
+				}
+			};
+			const initialMidpoint = getMidpoint(this.animAmt);
 			const angle = Math.PI + 2 * Math.PI * (i / numSides);
 			const rotationMatrix = getRotationMatrix(angle, 0);
 			const points = [
 				{x: hSize, y: 0, z: 0},
-				{
-					x: qSize + qSize * moveXAmt,
-					y: qSize * moveYAmt,
-					z: qSize + qSize * moveXAmt},
+				initialMidpoint,
 				{x: 0, y: 0, z: hSize},
 			]
 			.map(p => rotatePoint(p, rotationMatrix))
 			.map(p => ({x: p.x + position.x, y: p.y + position.y, z: p.z + position.z}));
 
 			context.strokeStyle = 'black';
-			context.fillStyle = gray(slurp(1, 0.9, -moveYAmt))
+			context.fillStyle = gray(slurp(1, 0.9, -points[1].y / qSize))
 			context.lineCap = 'round';
 			context.lineJoin = 'round';
 			context.lineWidth = 1;
