@@ -31,7 +31,7 @@ export default class Controller {
 	 */
 	render(context) {
 		const tileSize = 100;
-		const numTiles = 15;
+		const numTiles = 11;
 		const totalSize = numTiles * tileSize;
 		// Halving total size is to account for the fact that it's the width
 		// from zero, and we're centered around zero.
