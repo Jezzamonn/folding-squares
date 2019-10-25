@@ -4,10 +4,13 @@ export default class Controller {
 
 	constructor() {
 		this.animAmt = 0;
-		this.period = 5;
+		this.period = 20;
 
-		this.xzAngle = Math.PI / 12;
-		this.yAngle = Math.PI / 8;
+		this.yAngle = Math.PI / 6;
+	}
+
+	get xzAngle() {
+		return (2 * Math.PI / 4) * this.animAmt;
 	}
 
 	/**
@@ -48,7 +51,7 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	drawShape(context, position) {
-		const moveAngle = -Math.PI * easeInOut(loop(this.animAmt), 2);
+		const moveAngle = -Math.PI * easeInOut(loop(4 * this.animAmt), 2);
 		const moveXAmt = Math.cos(moveAngle);
 		const moveYAmt = Math.sin(moveAngle);
 		const size = 100;
