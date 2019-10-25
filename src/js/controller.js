@@ -52,7 +52,7 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	drawShape(context, position) {
-		const distAmt = Math.sqrt(position.x * position.x + position.z * position.z) / 1000;
+		const startDistAmt = getDistAmt(position);
 		const size = 100;
 		const hSize = size / 2;
 		const qSize = size / 4;
@@ -72,11 +72,14 @@ export default class Controller {
 			const angle = Math.PI + 2 * Math.PI * (i / numSides);
 			const rotationMatrix = getRotationMatrix(angle, 0);
 
-			const initialMidpoint = getMidpoint(this.animAmt - 0.4 * distAmt);
+			const initialMidpoint = getMidpoint(this.animAmt - 0.4 * startDistAmt);
 			const transformedMidpoint = addPoints(rotatePoint(initialMidpoint, rotationMatrix), position);
+			
+			const distAmt = getDistAmt(transformedMidpoint);
+			
 			const points = [
 				{x: hSize, y: 0, z: 0},
-				initialMidpoint,
+				getMidpoint(this.animAmt - 0.4 * distAmt),
 				{x: 0, y: 0, z: hSize},
 			]
 			.map(p => rotatePoint(p, rotationMatrix))
@@ -112,6 +115,10 @@ export default class Controller {
 		context.lineTo(point2d.x, point2d.y);
 	}
 
+}
+
+function getDistAmt(p) {
+	return Math.sqrt(p.x * p.x + p.z * p.z) / 1000;
 }
 
 function addPoints(p1, p2) {
