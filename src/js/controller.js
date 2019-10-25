@@ -1,5 +1,5 @@
 import { to2dIsometric, getRotationMatrix, columnVecToPoint, rotatePoint } from "./isometric";
-import { loop, easeInOut } from './util';
+import { loop, easeInOut, slurp } from './util';
 export default class Controller {
 
 	constructor() {
@@ -31,27 +31,50 @@ export default class Controller {
 		context.lineCap = 'round';
 		context.lineWidth = 2;
 		
+		const tileSize = 100;
+		const numTiles = 2;
+		const totalSize = numTiles * tileSize;
+		const hTotalSize = totalSize / 2;
+		for (let ix = 0; ix < numTiles; ix++) {
+			const xAmt = ix / (numTiles + 1);
+			const x = slurp(-hTotalSize, hTotalSize, xAmt);
+			for (let iz = 0; iz < numTiles; iz++) {
+				const zAmt = iz / (numTiles + 1);
+				const z = slurp(-hTotalSize, hTotalSize, zAmt);
+
+				this.drawShape(context, {x, y: 0, z});
+			}
+		}
+	}
+
+	/**
+	 * @param {!CanvasRenderingContext2D} context
+	 */
+	drawShape(context, position) {
 		const moveAngle = -Math.PI * easeInOut(loop(this.animAmt), 2);
 		const moveXAmt = Math.cos(moveAngle);
 		const moveYAmt = Math.sin(moveAngle);
+		const size = 100;
+		const hSize = size / 2;
 	
 		const numSides = 4;
 		for (let i = 0; i < numSides; i++) {
 			const angle = 2 * Math.PI * (i / numSides);
 			const rotationMatrix = getRotationMatrix(angle, 0);
 			const points = [
-				{x: 100, y: 0, z: 0},
+				{x: size, y: 0, z: 0},
 				{
-					x: 50 + 50 * moveXAmt,
-					y: 50 * moveYAmt,
-					z: 50 + 50 * moveXAmt},
-				{x: 0, y: 0, z: 100},
-			];
-			const rotatedPoints = points.map(p => rotatePoint(p, rotationMatrix));
+					x: hSize + hSize * moveXAmt,
+					y: hSize * moveYAmt,
+					z: hSize + hSize * moveXAmt},
+				{x: 0, y: 0, z: size},
+			]
+			.map(p => ({x: p.x + position.x, y: p.y + position.y, z: p.z + position.z}))
+			.map(p => rotatePoint(p, rotationMatrix));
 
 			context.beginPath();
-			for (let j = 0; j < rotatedPoints.length; j++) {
-				const point = rotatedPoints[j];
+			for (let j = 0; j < points.length; j++) {
+				const point = points[j];
 				if (j == 0) {
 					this.moveTo3d(context, point);
 				}
