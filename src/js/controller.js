@@ -1,10 +1,10 @@
 import { to2dIsometric, getRotationMatrix, columnVecToPoint, rotatePoint } from "./isometric";
-
+import { loop, easeInOut } from './util';
 export default class Controller {
 
 	constructor() {
 		this.animAmt = 0;
-		this.period = 3;
+		this.period = 5;
 
 		this.xzAngle = Math.PI / 6;
 		this.yAngle = Math.PI / 8;
@@ -31,7 +31,7 @@ export default class Controller {
 		context.lineCap = 'round';
 		context.lineWidth = 2;
 		
-		const moveAngle = -Math.PI * this.animAmt;
+		const moveAngle = -Math.PI * easeInOut(loop(this.animAmt), 2);
 		const moveXAmt = Math.cos(moveAngle);
 		const moveYAmt = Math.sin(moveAngle);
 	
