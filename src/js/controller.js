@@ -60,7 +60,7 @@ export default class Controller {
 		const numSides = 4;
 		for (let i = 0; i < numSides; i++) {
 			const getMidpoint = (animAmt) => {
-				const moveAngle = -Math.PI * easeInOut(loop(animAmt), 2);
+				const moveAngle = -Math.PI * easeInOut(loop(animAmt + 0.5), 2);
 				const moveXAmt = Math.cos(moveAngle);
 				const moveYAmt = Math.sin(moveAngle);
 				return {
