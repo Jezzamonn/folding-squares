@@ -33,7 +33,7 @@ export default class Controller {
 		context.lineWidth = 2;
 		
 		const tileSize = 100;
-		const numTiles = 1;
+		const numTiles = 2;
 		const totalSize = numTiles * tileSize;
 		const hTotalSize = totalSize / 2;
 		for (let ix = 0; ix < numTiles; ix++) {
@@ -52,8 +52,8 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	drawShape(context, position) {
-		const moveAngle = -Math.PI * easeInOut(loop(this.animAmt), 2);
-		const moveXAmt = -Math.cos(moveAngle);
+		const moveAngle = 0;//-Math.PI * easeInOut(loop(this.animAmt), 2);
+		const moveXAmt = Math.cos(moveAngle);
 		const moveYAmt = Math.sin(moveAngle);
 		const size = 100;
 		const hSize = size / 2;
@@ -71,8 +71,8 @@ export default class Controller {
 					z: qSize + qSize * moveXAmt},
 				{x: 0, y: 0, z: hSize},
 			]
-			.map(p => ({x: p.x + position.x, y: p.y + position.y, z: p.z + position.z}))
-			.map(p => rotatePoint(p, rotationMatrix));
+			.map(p => rotatePoint(p, rotationMatrix))
+			.map(p => ({x: p.x + position.x, y: p.y + position.y, z: p.z + position.z}));
 
 			context.beginPath();
 			for (let j = 0; j < points.length; j++) {
