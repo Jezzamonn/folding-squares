@@ -4,7 +4,7 @@ export default class Controller {
 
 	constructor() {
 		this.animAmt = 0;
-		this.period = 5;
+		this.period = 20;
 
 		this.xzAngle = 0;
 		this.yAngle = Math.PI / 8;
@@ -61,7 +61,7 @@ export default class Controller {
 	
 		const numSides = 4;
 		for (let i = 0; i < numSides; i++) {
-			const angle = 2 * Math.PI * (i / numSides);
+			const angle = Math.PI + 2 * Math.PI * (i / numSides);
 			const rotationMatrix = getRotationMatrix(angle, 0);
 			const points = [
 				{x: hSize, y: 0, z: 0},
