@@ -70,8 +70,8 @@ export default class Controller {
 			.map(p => rotatePoint(p, rotationMatrix))
 			.map(p => ({x: p.x + position.x, y: p.y + position.y, z: p.z + position.z}));
 
-			context.strokeStyle = gray(slurp(0.1, 0, -moveYAmt));
-			context.fillStyle = gray(slurp(0.1, 0, -moveYAmt));
+			context.strokeStyle = 'black';
+			context.fillStyle = gray(slurp(1, 0.9, -moveYAmt))
 			context.lineCap = 'round';
 			context.lineJoin = 'round';
 			context.lineWidth = 1;
