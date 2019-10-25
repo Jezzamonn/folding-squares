@@ -33,7 +33,7 @@ export default class Controller {
 		context.lineWidth = 2;
 		
 		const tileSize = 100;
-		const numTiles = 3;
+		const numTiles = 2;
 		const totalSize = numTiles * tileSize;
 		// Halving total size is to account for the fact that it's the width
 		// from zero, and we're centered around zero.
@@ -54,7 +54,7 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	drawShape(context, position) {
-		const moveAngle = 0;//-Math.PI * easeInOut(loop(this.animAmt), 2);
+		const moveAngle = -Math.PI * easeInOut(loop(this.animAmt), 2);
 		const moveXAmt = Math.cos(moveAngle);
 		const moveYAmt = Math.sin(moveAngle);
 		const size = 100;
