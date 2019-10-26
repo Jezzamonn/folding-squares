@@ -6,8 +6,8 @@ export default class Controller {
 		this.animAmt = 0;
 		this.period = 5;
 
-		this.xzAngle = Math.PI / 12;
-		this.yAngle = Math.PI / 6;
+		this.xzAngle = Math.PI / 4;
+		this.yAngle = Math.PI / 4;
 	}
 
 	get flipped() {
@@ -56,37 +56,39 @@ export default class Controller {
 		const size = 100;
 		const hSize = size / 2;
 		const qSize = size / 4;
+
+		const localAnimAmt = loop(this.animAmt - startDistAmt);
 	
 		const numSides = 4;
 		for (let i = 0; i < numSides; i++) {
-			const getMidpoint = (animAmt) => {
-				const moveAngle = -Math.PI * easeInOut(loop(animAmt + 0.5), 2);
-				const moveXAmt = Math.cos(moveAngle);
-				const moveYAmt = Math.sin(moveAngle);
-				return {
-					x: qSize + qSize * moveXAmt,
-					y: qSize * moveYAmt,
-					z: qSize + qSize * moveXAmt
-				}
-			};
 			const angle = Math.PI + 2 * Math.PI * (i / numSides);
 			const rotationMatrix = getRotationMatrix(angle, 0);
 
-			const initialMidpoint = getMidpoint(this.animAmt - 0.4 * startDistAmt);
-			const transformedMidpoint = addPoints(rotatePoint(initialMidpoint, rotationMatrix), position);
+			// const initialMidpoint = getMidpoint(this.animAmt - 0.4 * startDistAmt);
+			// const transformedMidpoint = addPoints(rotatePoint(initialMidpoint, rotationMatrix), position);
 			
-			const distAmt = getDistAmt(transformedMidpoint);
+			// const distAmt = getDistAmt(transformedMidpoint);
 			
 			const points = [
-				{x: hSize, y: 0, z: 0},
-				getMidpoint(this.animAmt - 0.4 * distAmt),
-				{x: 0, y: 0, z: hSize},
+				{
+					x: hSize, 
+					y: hSize * localAnimAmt, 
+					z: 0,
+				},{
+					x: hSize, 
+					y: hSize * localAnimAmt, 
+					z: hSize,
+				},{
+					x: 0, 
+					y: hSize * localAnimAmt, 
+					z: hSize,
+				},
 			]
 			.map(p => rotatePoint(p, rotationMatrix))
 			.map(p => addPoints(p, position));
 
 			context.strokeStyle = 'black';
-			context.fillStyle = gray(slurp(1, 0.9, -points[1].y / qSize))
+			context.fillStyle = 'white';
 			context.lineCap = 'round';
 			context.lineJoin = 'round';
 			context.lineWidth = 1;
@@ -99,9 +101,9 @@ export default class Controller {
 				else {
 					this.lineTo3d(context, point);
 				}
-				context.fill();
-				context.stroke();
 			}
+			context.fill();
+			context.stroke();
 		}
 	}
 
