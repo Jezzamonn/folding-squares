@@ -66,11 +66,12 @@ export default class Controller {
 			return;
 		}
 
-		const heightAmt = clampDivideInterval(localAnimAmt, 0.5, 1)
+		const splitTime = 0.6;
+		const heightAmt = clampDivideInterval(localAnimAmt, splitTime, 1)
 		const easedHeightAmt = easeInOut(heightAmt, 5);
 		const height = -Math.SQRT1_2 * size * easedHeightAmt;
 
-		const splitAmt = easeInOut(clampDivideInterval(localAnimAmt, 0, 0.5), 3);
+		const splitAmt = easeInOut(clampDivideInterval(localAnimAmt, 0, splitTime), 3);
 		const adjustedSplitAmt = 1 - splitAmt;
 
 		context.strokeStyle = 'black';
