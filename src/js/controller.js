@@ -66,8 +66,11 @@ export default class Controller {
 			return;
 		}
 
-		const heightAmt = easeInOut(clampDivideInterval(localAnimAmt, 0.5, 1), 5);
-		const height = -Math.SQRT2 * size * heightAmt;
+		const heightAmt = clampDivideInterval(localAnimAmt, 0.5, 1)
+		const easedHeightAmt = easeInOut(heightAmt, 5);
+		const height = -Math.SQRT2 * size * easedHeightAmt;
+
+		const splitAmt = clampDivideInterval(localAnimAmt, 0, 0.5);
 
 		context.strokeStyle = 'black';
 		context.fillStyle = 'white';
@@ -75,6 +78,7 @@ export default class Controller {
 		context.lineJoin = 'round';
 		context.lineWidth = 1;
 
+		// Fill for the top
 		{
 			const points = [
 				{x: hSize, y: height, z: hSize},
@@ -88,6 +92,7 @@ export default class Controller {
 			context.fill();
 		}
 
+		// Corners of the square for the flippy part
 		const numSides = 4;
 		for (let i = 0; i < numSides; i++) {
 			const angle = Math.PI + 2 * Math.PI * (i / numSides);
@@ -103,11 +108,9 @@ export default class Controller {
 					x: hSize, 
 					y: height, 
 					z: 0,
-				},{
-					x: hSize, 
-					y: height, 
-					z: hSize,
-				},{
+				},
+				getCornerPoint(qSize, height, splitAmt),
+				{
 					x: 0, 
 					y: height, 
 					z: hSize,
@@ -122,6 +125,7 @@ export default class Controller {
 			context.stroke();
 		}
 
+		// Front-facing edges
 		for (let i = 2; i < 4; i++) {
 			const angle = Math.PI + 2 * Math.PI * (i / numSides);
 			const rotationMatrix = getRotationMatrix(angle, 0);
@@ -166,6 +170,17 @@ export default class Controller {
 
 	}
 
+}
+
+function getCornerPoint(qSize, height, animAmt) {
+	const moveAngle = -Math.PI * easeInOut(loop(animAmt + 0.5), 2);
+	const moveXAmt = Math.cos(moveAngle);
+	const moveYAmt = Math.sin(moveAngle);
+	return {
+		x: qSize + qSize * moveXAmt,
+		y: qSize * moveYAmt + height,
+		z: qSize + qSize * moveXAmt
+	}
 }
 
 function getDistAmt(p) {
