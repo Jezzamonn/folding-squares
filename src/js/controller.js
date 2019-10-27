@@ -68,9 +68,10 @@ export default class Controller {
 
 		const heightAmt = clampDivideInterval(localAnimAmt, 0.5, 1)
 		const easedHeightAmt = easeInOut(heightAmt, 5);
-		const height = -Math.SQRT2 * size * easedHeightAmt;
+		const height = -Math.SQRT1_2 * size * easedHeightAmt;
 
 		const splitAmt = clampDivideInterval(localAnimAmt, 0, 0.5);
+		const adjustedSplitAmt = 1 - splitAmt;
 
 		context.strokeStyle = 'black';
 		context.fillStyle = 'white';
@@ -109,7 +110,7 @@ export default class Controller {
 					y: height, 
 					z: 0,
 				},
-				getCornerPoint(qSize, height, splitAmt),
+				getCornerPoint(qSize, height, adjustedSplitAmt),
 				{
 					x: 0, 
 					y: height, 
@@ -125,25 +126,28 @@ export default class Controller {
 			context.stroke();
 		}
 
-		// Front-facing edges
-		for (let i = 2; i < 4; i++) {
-			const angle = Math.PI + 2 * Math.PI * (i / numSides);
-			const rotationMatrix = getRotationMatrix(angle, 0);
+		// We've fully finished splitting
+		if (splitAmt == 1) {
+			// Front-facing edges
+			for (let i = 2; i < 4; i++) {
+				const angle = Math.PI + 2 * Math.PI * (i / numSides);
+				const rotationMatrix = getRotationMatrix(angle, 0);
 
-			const points = [
-				{x: hSize, y: 0, z:hSize},
-				{x: hSize, y: height, z:hSize},
-				{x: hSize, y: height, z:-hSize},
-				{x: hSize, y: 0, z:-hSize},
-			]
-			.map(p => rotatePoint(p, rotationMatrix))
-			.map(p => addPoints(p, position));
+				const points = [
+					{x: hSize, y: 0, z:hSize},
+					{x: hSize, y: height, z:hSize},
+					{x: hSize, y: height, z:-hSize},
+					{x: hSize, y: 0, z:-hSize},
+				]
+				.map(p => rotatePoint(p, rotationMatrix))
+				.map(p => addPoints(p, position));
 
-			context.fillStyle = (i % 2 == 0) ? gray(0.9) : gray(0.8);
-			context.beginPath();
-			this.drawPath(context, points);
-			context.fill();
-			context.stroke();
+				context.fillStyle = (i % 2 == 0) ? gray(0.9) : gray(0.8);
+				context.beginPath();
+				this.drawPath(context, points);
+				context.fill();
+				context.stroke();
+			}
 		}
 	}
 
@@ -173,7 +177,7 @@ export default class Controller {
 }
 
 function getCornerPoint(qSize, height, animAmt) {
-	const moveAngle = -Math.PI * easeInOut(loop(animAmt + 0.5), 2);
+	const moveAngle = -Math.PI * easeInOut(animAmt, 2);
 	const moveXAmt = Math.cos(moveAngle);
 	const moveYAmt = Math.sin(moveAngle);
 	return {
