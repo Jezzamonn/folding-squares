@@ -65,6 +65,10 @@ export function divideInterval(t, min, max) {
     return (t - min) / (max - min);
 }
 
+export function clampDivideInterval(t, min, max) {
+    return clamp(divideInterval(t, min, max), 0, 1);
+}
+
 export function rgb(r, g, b) {
 	return 'rgb('+r+','+g+','+b+')';
 }

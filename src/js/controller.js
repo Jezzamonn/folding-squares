@@ -1,5 +1,5 @@
 import { to2dIsometric, getRotationMatrix, columnVecToPoint, rotatePoint } from "./isometric";
-import { loop, easeInOut, slurp, gray } from './util';
+import { loop, easeInOut, slurp, gray, divideInterval, clampDivideInterval } from './util';
 export default class Controller {
 
 	constructor() {
@@ -57,15 +57,17 @@ export default class Controller {
 		const hSize = size / 2;
 		const qSize = size / 4;
 
-		const localAnimAmt = easeInOut(loop(this.animAmt - startDistAmt), 2);
-	
+		const localAnimAmt = this.animAmt - 0.7 * startDistAmt;
+
+		const heightAmt = easeInOut(localAnimAmt, 10);
+		const height = -Math.SQRT2 * size * heightAmt;
+
 		context.strokeStyle = 'black';
 		context.fillStyle = 'white';
 		context.lineCap = 'round';
 		context.lineJoin = 'round';
 		context.lineWidth = 1;
 
-		const height = -size * localAnimAmt;
 
 		{
 			const points = [
