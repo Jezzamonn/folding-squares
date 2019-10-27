@@ -30,6 +30,11 @@ export default class Controller {
 	 * @param {!CanvasRenderingContext2D} context
 	 */
 	render(context) {
+		this.drawShapes(context, this.animAmt + 1);
+		this.drawShapes(context, this.animAmt);
+	}
+
+	drawShapes(context, baseAnimAmt) {
 		const tileSize = 100;
 		const numTiles = 11;
 		const totalSize = numTiles * tileSize;
@@ -43,7 +48,7 @@ export default class Controller {
 				const zAmt = numTiles == 0 ? 0 : iz / (numTiles - 1);
 				const z = slurp(-furthestPosition, furthestPosition, zAmt);
 
-				this.drawShape(context, {x, y: 0, z});
+				this.drawShape(context, {x, y: 0, z}, baseAnimAmt);
 			}
 		}
 	}
@@ -51,13 +56,16 @@ export default class Controller {
 	/**
 	 * @param {!CanvasRenderingContext2D} context
 	 */
-	drawShape(context, position) {
+	drawShape(context, position, baseAnimAmt) {
 		const startDistAmt = getDistAmt(position);
 		const size = 100;
 		const hSize = size / 2;
 		const qSize = size / 4;
 
-		const localAnimAmt = this.animAmt - 0.7 * startDistAmt;
+		const localAnimAmt = baseAnimAmt - 2 * startDistAmt;
+		if (localAnimAmt < 0) {
+			return;
+		}
 
 		const heightAmt = easeInOut(localAnimAmt, 10);
 		const height = -Math.SQRT2 * size * heightAmt;
@@ -67,7 +75,6 @@ export default class Controller {
 		context.lineCap = 'round';
 		context.lineJoin = 'round';
 		context.lineWidth = 1;
-
 
 		{
 			const points = [
