@@ -78,15 +78,15 @@ export default class Controller {
 			const points = [
 				{
 					x: hSize, 
-					y: hSize * localAnimAmt, 
+					y: -hSize * localAnimAmt, 
 					z: 0,
 				},{
 					x: hSize, 
-					y: hSize * localAnimAmt, 
+					y: -hSize * localAnimAmt, 
 					z: hSize,
 				},{
 					x: 0, 
-					y: hSize * localAnimAmt, 
+					y: -hSize * localAnimAmt, 
 					z: hSize,
 				},
 			]
@@ -99,14 +99,14 @@ export default class Controller {
 			context.stroke();
 		}
 
-		for (let i = 1; i < 3; i++) {
+		for (let i = 2; i < 4; i++) {
 			const angle = Math.PI + 2 * Math.PI * (i / numSides);
 			const rotationMatrix = getRotationMatrix(angle, 0);
 
 			const points = [
 				{x: hSize, y: 0, z:hSize},
-				{x: hSize, y: hSize * localAnimAmt, z:hSize},
-				{x: hSize, y: hSize * localAnimAmt, z:-hSize},
+				{x: hSize, y: -hSize * localAnimAmt, z:hSize},
+				{x: hSize, y: -hSize * localAnimAmt, z:-hSize},
 				{x: hSize, y: 0, z:-hSize},
 			]
 			.map(p => rotatePoint(p, rotationMatrix))
