@@ -104,8 +104,10 @@ export default class Controller {
 			const rotationMatrix = getRotationMatrix(angle, 0);
 
 			const points = [
-				{x: hSize, y: localAnimAmt, z:hSize},
-				{x: hSize, y: localAnimAmt, z:-hSize},
+				{x: hSize, y: 0, z:hSize},
+				{x: hSize, y: hSize * localAnimAmt, z:hSize},
+				{x: hSize, y: hSize * localAnimAmt, z:-hSize},
+				{x: hSize, y: 0, z:-hSize},
 			]
 			.map(p => rotatePoint(p, rotationMatrix))
 			.map(p => addPoints(p, position));
