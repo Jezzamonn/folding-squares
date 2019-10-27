@@ -72,7 +72,6 @@ export default class Controller {
 		const height = -Math.SQRT1_2 * size * easedHeightAmt;
 
 		const splitAmt = easeInOut(clampDivideInterval(localAnimAmt, 0, splitTime), 3);
-		const adjustedSplitAmt = 1 - splitAmt;
 
 		context.strokeStyle = 'black';
 		context.fillStyle = 'white';
@@ -100,10 +99,12 @@ export default class Controller {
 			const angle = Math.PI + 2 * Math.PI * (i / numSides);
 			const rotationMatrix = getRotationMatrix(angle, 0);
 
-			// const initialMidpoint = getMidpoint(this.animAmt - 0.4 * startDistAmt);
-			// const transformedMidpoint = addPoints(rotatePoint(initialMidpoint, rotationMatrix), position);
-			
-			// const distAmt = getDistAmt(transformedMidpoint);
+			const initialCornerPoint = getCornerPoint(qSize, 0, splitAmt);
+			const transformedCornerPoint = addPoints(rotatePoint(initialCornerPoint, rotationMatrix), position);
+			const newDistAmt = getDistAmt(transformedCornerPoint);
+			// Some duplicated logic here but who cares
+			const newLocalAnimAmt = baseAnimAmt - 2 * newDistAmt;
+			const newSplitAmt = easeInOut(clampDivideInterval(newLocalAnimAmt, 0, splitTime), 3);
 			
 			const points = [
 				{
@@ -111,7 +112,7 @@ export default class Controller {
 					y: height, 
 					z: 0,
 				},
-				getCornerPoint(qSize, height, adjustedSplitAmt),
+				getCornerPoint(qSize, height, newSplitAmt),
 				{
 					x: 0, 
 					y: height, 
@@ -178,7 +179,7 @@ export default class Controller {
 }
 
 function getCornerPoint(qSize, height, animAmt) {
-	const moveAngle = -Math.PI * easeInOut(animAmt, 2);
+	const moveAngle = -Math.PI * easeInOut(1 - animAmt, 2);
 	const moveXAmt = Math.cos(moveAngle);
 	const moveYAmt = Math.sin(moveAngle);
 	return {
