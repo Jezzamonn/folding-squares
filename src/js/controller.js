@@ -35,8 +35,8 @@ export default class Controller {
 	}
 
 	drawShapes(context, baseAnimAmt) {
-		const tileSize = 100;
-		const numTiles = 11;
+		const tileSize = 80;
+		const numTiles = 13;
 		const totalSize = numTiles * tileSize;
 		// Halving total size is to account for the fact that it's the width
 		// from zero, and we're centered around zero.
@@ -48,7 +48,7 @@ export default class Controller {
 				const zAmt = numTiles == 0 ? 0 : iz / (numTiles - 1);
 				const z = slurp(-furthestPosition, furthestPosition, zAmt);
 
-				this.drawShape(context, {x, y: 0, z}, baseAnimAmt);
+				this.drawShape(context, {x, y: 0, z}, tileSize, baseAnimAmt);
 			}
 		}
 	}
@@ -56,9 +56,8 @@ export default class Controller {
 	/**
 	 * @param {!CanvasRenderingContext2D} context
 	 */
-	drawShape(context, position, baseAnimAmt) {
+	drawShape(context, position, size, baseAnimAmt) {
 		const startDistAmt = getDistAmt(position);
-		const size = 100;
 		const hSize = size / 2;
 		const qSize = size / 4;
 
