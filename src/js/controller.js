@@ -59,6 +59,12 @@ export default class Controller {
 
 		const localAnimAmt = loop(this.animAmt - startDistAmt);
 	
+		context.strokeStyle = 'black';
+		context.fillStyle = 'white';
+		context.lineCap = 'round';
+		context.lineJoin = 'round';
+		context.lineWidth = 1;
+
 		const numSides = 4;
 		for (let i = 0; i < numSides; i++) {
 			const angle = Math.PI + 2 * Math.PI * (i / numSides);
@@ -87,21 +93,25 @@ export default class Controller {
 			.map(p => rotatePoint(p, rotationMatrix))
 			.map(p => addPoints(p, position));
 
-			context.strokeStyle = 'black';
-			context.fillStyle = 'white';
-			context.lineCap = 'round';
-			context.lineJoin = 'round';
-			context.lineWidth = 1;
 			context.beginPath();
-			for (let j = 0; j < points.length; j++) {
-				const point = points[j];
-				if (j == 0) {
-					this.moveTo3d(context, point);
-				}
-				else {
-					this.lineTo3d(context, point);
-				}
-			}
+			this.drawPath(context, points);
+			context.fill();
+			context.stroke();
+		}
+
+		for (let i = 1; i < 3; i++) {
+			const angle = Math.PI + 2 * Math.PI * (i / numSides);
+			const rotationMatrix = getRotationMatrix(angle, 0);
+
+			const points = [
+				{x: hSize, y: localAnimAmt, z:hSize},
+				{x: hSize, y: localAnimAmt, z:-hSize},
+			]
+			.map(p => rotatePoint(p, rotationMatrix))
+			.map(p => addPoints(p, position));
+
+			context.beginPath();
+			this.drawPath(context, points);
 			context.fill();
 			context.stroke();
 		}
@@ -115,6 +125,19 @@ export default class Controller {
 	lineTo3d(context, point){
 		const point2d = to2dIsometric(point.x, point.y, point.z, this.xzAngle, this.yAngle);
 		context.lineTo(point2d.x, point2d.y);
+	}
+
+	drawPath(context, points) {
+		for (let j = 0; j < points.length; j++) {
+			const point = points[j];
+			if (j == 0) {
+				this.moveTo3d(context, point);
+			}
+			else {
+				this.lineTo3d(context, point);
+			}
+		}
+
 	}
 
 }
