@@ -127,6 +127,7 @@ export default class Controller {
 			.map(p => rotatePoint(p, rotationMatrix))
 			.map(p => addPoints(p, position));
 
+			context.fillStyle = (i % 2 == 0) ? gray(0.9) : gray(0.8);
 			context.beginPath();
 			this.drawPath(context, points);
 			context.fill();
