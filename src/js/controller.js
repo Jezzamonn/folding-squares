@@ -65,6 +65,21 @@ export default class Controller {
 		context.lineJoin = 'round';
 		context.lineWidth = 1;
 
+		const height = -hSize * localAnimAmt;
+
+		{
+			const points = [
+				{x: hSize, y: height, z: hSize},
+				{x: hSize, y: height, z: -hSize},
+				{x: -hSize, y: height, z: -hSize},
+				{x: -hSize, y: height, z: hSize},
+			]
+			.map(p => addPoints(p, position));
+			context.beginPath();
+			this.drawPath(context, points);
+			context.fill();
+		}
+
 		const numSides = 4;
 		for (let i = 0; i < numSides; i++) {
 			const angle = Math.PI + 2 * Math.PI * (i / numSides);
@@ -78,15 +93,15 @@ export default class Controller {
 			const points = [
 				{
 					x: hSize, 
-					y: -hSize * localAnimAmt, 
+					y: height, 
 					z: 0,
 				},{
 					x: hSize, 
-					y: -hSize * localAnimAmt, 
+					y: height, 
 					z: hSize,
 				},{
 					x: 0, 
-					y: -hSize * localAnimAmt, 
+					y: height, 
 					z: hSize,
 				},
 			]
@@ -105,8 +120,8 @@ export default class Controller {
 
 			const points = [
 				{x: hSize, y: 0, z:hSize},
-				{x: hSize, y: -hSize * localAnimAmt, z:hSize},
-				{x: hSize, y: -hSize * localAnimAmt, z:-hSize},
+				{x: hSize, y: height, z:hSize},
+				{x: hSize, y: height, z:-hSize},
 				{x: hSize, y: 0, z:-hSize},
 			]
 			.map(p => rotatePoint(p, rotationMatrix))
