@@ -62,11 +62,11 @@ export default class Controller {
 		const qSize = size / 4;
 
 		const localAnimAmt = baseAnimAmt - 2 * startDistAmt;
-		if (localAnimAmt < 0) {
+		if (localAnimAmt < 0.1) {
 			return;
 		}
 
-		const heightAmt = easeInOut(localAnimAmt, 10);
+		const heightAmt = easeInOut(clampDivideInterval(localAnimAmt, 0.5, 1), 5);
 		const height = -Math.SQRT2 * size * heightAmt;
 
 		context.strokeStyle = 'black';
