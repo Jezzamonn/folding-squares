@@ -70,7 +70,7 @@ export default class Controller {
 		const easedHeightAmt = easeInOut(heightAmt, 5);
 		const height = -Math.SQRT1_2 * size * easedHeightAmt;
 
-		const splitAmt = clampDivideInterval(localAnimAmt, 0, 0.5);
+		const splitAmt = easeInOut(clampDivideInterval(localAnimAmt, 0, 0.5), 3);
 		const adjustedSplitAmt = 1 - splitAmt;
 
 		context.strokeStyle = 'black';
