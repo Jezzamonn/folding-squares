@@ -57,7 +57,7 @@ export default class Controller {
 		const hSize = size / 2;
 		const qSize = size / 4;
 
-		const localAnimAmt = loop(this.animAmt - startDistAmt);
+		const localAnimAmt = easeInOut(loop(this.animAmt - startDistAmt), 2);
 	
 		context.strokeStyle = 'black';
 		context.fillStyle = 'white';
@@ -65,7 +65,7 @@ export default class Controller {
 		context.lineJoin = 'round';
 		context.lineWidth = 1;
 
-		const height = -hSize * localAnimAmt;
+		const height = -size * localAnimAmt;
 
 		{
 			const points = [
